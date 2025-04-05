@@ -62,10 +62,10 @@ def calculate_bpm(spike_data, samplerate):
 def detect_bpm(data, samplerate):
     f = LPF(data, samplerate, 200)
     f = np.power(f, 2) * 100
-    plt.plot(f)
+    # plt.plot(f)
     spikes = detect_spikes(f)
     # plt.plot(np.multiply(spikes, np.max(f)))
-    plt.show()
+    # plt.show()
     bpm = calculate_bpm(spikes, samplerate)
     return bpm
     # splices_size = round(60*samplerate/bpm)
