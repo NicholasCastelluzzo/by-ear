@@ -98,8 +98,8 @@ beat_pitches = [[pitch[:-1]+str(avg_octave) for pitch in beat] for beat in beat_
 durations = calc_durations(beat_pitches, energies)
 #print(durations)
 
-file_name_no_extension = re.sub("[.].*", "", music_file)
-file_name_no_extension = re.sub(".*[\\/]", "", file_name_no_extension)
+file_name_no_extension = re.sub(r"[.][^\/\\]*$", "", music_file)
+file_name_no_extension = re.sub(r".*[\\\/]", "", file_name_no_extension)
 print(file_name_no_extension)
 save_directory = "temp/"
 os.makedirs(save_directory, exist_ok=True)
