@@ -23,7 +23,7 @@ def remove_higher_octaves(notes):
         elif pitch in lowest_octaves and octave < lowest_octaves[pitch]:
             lowest_octaves[pitch] = octave
 
-    print(lowest_octaves)
+    #print(lowest_octaves)
     for i in range(len(notes)-1, -1, -1):
         note = notes[i]
         pitch = get_pitch(note)
@@ -38,9 +38,18 @@ def calc_avg_energy(data):
     n = len(data)
     data = np.power(data, 2)
     data = np.sum(data)
-    energy = data / n
-    print(energy*100)
-    return energy*100
+    energy = data / n * 100
+    if energy < 0.01:
+        energy = 0
+    return energy
+
+def get_is_rest(data):
+    e = calc_avg_energy(data)
+    if e < 0.01:
+        return 1
+    else:
+        return 0
+
 
 def create_pitch_dict() -> dict:
     pitch_data = csv.DictReader(open("pitch_chart.csv"))
@@ -68,7 +77,7 @@ def get_note_from_freq(freq: float, pitch_dict: dict) -> str:
     return None
 
 def find_freqs(data, samplerate) -> list:
-    if calc_avg_energy(data) < 0.01:
+    if get_is_rest(data):
         return []
     fft = np.fft.fft(data)
     fft = np.power(fft, 2)
