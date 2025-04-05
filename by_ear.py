@@ -8,6 +8,7 @@ import re
 
 import detect_bpm
 import detect_pitch
+import sheet_music_generator
 
 def remove_useless_rests(beat_pitches):
     while not beat_pitches[0]:
@@ -100,7 +101,6 @@ durations = calc_durations(beat_pitches, energies)
 
 file_name_no_extension = re.sub(r"[.][^\/\\]*$", "", music_file)
 file_name_no_extension = re.sub(r".*[\\\/]", "", file_name_no_extension)
-print(file_name_no_extension)
 save_directory = "temp/"
 os.makedirs(save_directory, exist_ok=True)
 new_file_name = save_directory + file_name_no_extension + ".music"
@@ -141,3 +141,8 @@ with open(new_file_name, "r+") as file:
     file.seek(0)
     file.write(data)
     file.truncate()
+
+output_dir = "output/"
+os.makedirs(output_dir, exist_ok=True)
+sheet_music_generator.generate_sheet_music(new_file_name, output_dir + file_name_no_extension + ".png")
+exit(0)

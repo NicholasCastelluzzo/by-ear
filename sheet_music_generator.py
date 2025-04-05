@@ -8,17 +8,19 @@
 
 import pygame
 import sys
-import Note
+import note as n
 
 def generate_sheet_music(music_file, output_file):
-
+    ASSET_DIR = "assets/"
     # pygame setup
     pygame.init()
-    background = pygame.image.load("staff_paper.png")
+    pygame.font.init()
+    font = pygame.font.SysFont('Cambria MS', 22)
+    background = pygame.image.load(ASSET_DIR + "staff_paper.png")
 
 
 
-    ASSET_DIR = "MusicImages/"
+    
     LINE_Y_OFFSET = 109.75 # Space in the Y-axiz between two lines of music
     NUM_LINES = 8 # Total lines of music 
     WHOLE_STEP_DIST = 4.075 # pixel measurement between a whole step (moving by one position/ledger line)
@@ -88,8 +90,11 @@ def generate_sheet_music(music_file, output_file):
             screen.blit(time_sig_image, (time_sig_position_x, time_sig_position_y + i*LINE_Y_OFFSET))
 
 
-        ASSET_DIR = "temp/"
-        clef, time_signature, tempo, measures = Note.read_music_file_with_measures(ASSET_DIR + music_file)
+
+        clef, time_signature, tempo, measures = n.read_music_file_with_measures(music_file)
+
+        text_surface = font.render(f"Q = {tempo}", False, (0,0,0))
+        screen.blit(text_surface, (80,0))
 
         for i in range(len(measures)):
             line_num = i // MEASURES_PER_LINE
@@ -128,6 +133,7 @@ def generate_sheet_music(music_file, output_file):
                 position_y += line_num * LINE_Y_OFFSET - dist * WHOLE_STEP_DIST
 
                 screen.blit(image, (position_x, position_y))
+        print(f"Outputting Sheet to {output_file}")
         pygame.image.save(screen, output_file, ".png")
 
         # Updates the display
